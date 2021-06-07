@@ -1,4 +1,4 @@
-package game;
+package pac_man_design;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class pac_man_design extends JFrame	implements Runnable{
 
 	JPanel jp1,ap,np,sp,wp,cp,ep;

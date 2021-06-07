@@ -2,166 +2,74 @@ package game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class pac_man extends JFrame implements Runnable {
+import pac_man_base.pac_man_frame;
+import pac_man_base.pac_man_variable;
 
-	public int wall[][] = { { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1 },
-			{ 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-			{ 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1 },
-			{ 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 },
-			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
-			feed[][] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0 },
-					{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0 },
-					{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-					{ 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0 },
-					{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0 },
-					{ 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0 },
-					{ 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-			superFeed[][] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
-					{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+@SuppressWarnings("serial")
+public class pac_man extends pac_man_frame{
+
 	Point pac_man = new Point();
 	int wherePac = 2, mouseSize = 0, drawPacX = 0, drawPacY = 0, draw = 0, sub = 3, where = 3;
 	// 0 == up, 1 == right, 2 == bottom, 3 == left;
 	Thread th = new Thread(this);
-	JPanel jp1, ap, np, sp, wp, cp, ep, pac;
 	boolean run = true, turn = true;
+
+	DecimalFormat format = new DecimalFormat("00000");
+	int score = 0, max_score = 0;
 
 	public pac_man() {
 		// TODO Auto-generated constructor stub
-		setTitle("ÆÑ¸Ç");
-		setDefaultCloseOperation(2);
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				System.exit(0);
-			}
-		});
-
-		add(cp = new JPanel(new BorderLayout()), BorderLayout.CENTER);
-		add(np = new JPanel(new BorderLayout()), BorderLayout.NORTH);
-		add(sp = new JPanel(new BorderLayout()), BorderLayout.SOUTH);
-		add(ep = new JPanel(new BorderLayout()), BorderLayout.EAST);
-		add(wp = new JPanel(new BorderLayout()), BorderLayout.WEST);
+		fs("ÆÑ¸Ç");
 
 		size(cp, 840, 840);
 		cp.setBackground(Color.black);
 
 		cp.add(ap = new JPanel(new BorderLayout()) {
 			@Override
-			protected void paintComponent(Graphics g) {
+			protected void paintComponent(Graphics g) { //¹è°æ, ¸ÔÀÌ ±×¸®±â
 				// TODO Auto-generated method stub
 				super.paintComponent(g);
 				for (int i = 0; i < 840; i = i + 30) {
 					for (int j = 0; j < 840; j = j + 30) {
 						g.setColor(new Color(36, 36, 223));
 						g.drawRect(i, j, 30, 30);
-						if (wall[i / 30][j / 30] == 1) {
+						if (pac_man_variable.wall[i / 30][j / 30] == 1) {
 							g.fillRect(i, j, 30, 30);
 						}
 						g.setColor(new Color(255, 184, 151));
-						if (feed[i / 30][j / 30] == 1) {
+						if (pac_man_variable.feed[i / 30][j / 30] == 1) {
 							g.fillOval(i + 10, j + 10, 10, 10);
 						}
-						if (superFeed[i / 30][j / 30] == 1) {
+						if (pac_man_variable.superFeed[i / 30][j / 30] == 1) {
 							g.fillOval(i + 5, j + 5, 20, 20);
 						}
 					}
 				}
 			}
 		});
+
 		ap.setBackground(Color.black);
 		size(ap, 840, 840);
 		pac_man.x = 14;
 		pac_man.y = 20;
-		ap.add(pac = new JPanel() {
+		
+		//ÆÑ¸Ç±×¸®±â
+		ap.add(pac = new JPanel(new BorderLayout()) {
 			@Override
 			protected void paintComponent(Graphics g) {
 				// TODO Auto-generated method stub
@@ -191,18 +99,61 @@ public class pac_man extends JFrame implements Runnable {
 						break;
 					}
 					default:
-						
+
 						break;
 					}
-					
-					g.fillArc(pac_man.x * 30 - drawPacX, pac_man.y * 30 - drawPacY, 30, 30, -wherePac * 90 + 135, 270 + mouseSize);
+
+					g.fillArc(pac_man.x * 30 - drawPacX, pac_man.y * 30 - drawPacY, 30, 30, -wherePac * 90 + 135,
+							270 + mouseSize);
 				}
+
+			}
+		});
+		pac.setOpaque(false);
+		size(pac, 840, 840);
+
+		//À¯·É±×¸®±â
+		pac.add(blinkyPanel = new JPanel(new BorderLayout()) {
+			protected void paintComponent(Graphics g) {
+				g.setColor(Color.red);
+				ImageIcon ic = new ImageIcon("image/blinky.png");
+				Image im = ic.getImage();
+				
+				g.drawImage(im,pac_man_variable.blinkyPoint.x * 30, pac_man_variable.blinkyPoint.y * 30, 30, 30,this);
+			};
+		});
+		
+		blinkyPanel.setOpaque(false);
+		size(blinkyPanel,840,840);
+		
+		// À§¿¡ Á¡¼ö Ç¥½Ã
+		np.add(ap = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponent(g);
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setColor(Color.white);
+				g2.setFont(new Font("Shylock NBP",Font.BOLD,30));
+				g2.drawString(score+"", 30, 50);
 				
 			}
 		});
 
-		pac.setOpaque(false);
-		size(pac, 840, 840);
+		size(np, 840, 100);
+		ap.setBackground(Color.black);
+
+		// ¾Æ·¡
+		sp.add(ap = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponent(g);
+			}
+		});
+
+		size(sp, 840, 50);
+		ap.setBackground(Color.black);
 
 		tm1.start();
 		th.start();
@@ -215,25 +166,25 @@ public class pac_man extends JFrame implements Runnable {
 				int y = pac_man.y;
 				switch (e.getKeyCode()) {
 				case 37: {
-					if (wall[--x][y] == 0) {
+					if (pac_man_variable.wall[--x][y] == 0) {
 						sub = 3;
 					}
 					break;
 				}
 				case 38: {
-					if (wall[x][--y] == 0) {
+					if (pac_man_variable.wall[x][--y] == 0) {
 						sub = 0;
 					}
 					break;
 				}
 				case 39: {
-					if (wall[++x][y] == 0) {
+					if (pac_man_variable.wall[++x][y] == 0) {
 						sub = 1;
 					}
 					break;
 				}
 				case 40: {
-					if (wall[x][++y] == 0) {
+					if (pac_man_variable.wall[x][++y] == 0) {
 						sub = 2;
 					}
 					break;
@@ -244,10 +195,7 @@ public class pac_man extends JFrame implements Runnable {
 			}
 		});
 
-		pack();
-		setVisible(true);
-		setLocationRelativeTo(null);
-
+		sh();
 	}
 
 	Timer tm1 = new Timer(100, new ActionListener() {
@@ -269,6 +217,7 @@ public class pac_man extends JFrame implements Runnable {
 		new pac_man();
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -277,38 +226,38 @@ public class pac_man extends JFrame implements Runnable {
 				int x = pac_man.x;
 				int y = pac_man.y;
 				boolean go = true;
-				
+
 				if (x == 0 && sub == 3) {
 					x = 28;
 					pac_man.x = 28;
 				}
-				
+
 				if (x == 27 && sub == 1) {
 					x = 0;
 					pac_man.x = 0;
 				}
-				
+
 				switch (sub) {
 				case 0: {
-					if (wall[x][--y] == 1) {
+					if (pac_man_variable.wall[x][--y] == 1) {
 						go = false;
 					}
 					break;
 				}
 				case 1: {
-					if (wall[++x][y] == 1) {
+					if (pac_man_variable.wall[++x][y] == 1) {
 						go = false;
 					}
 					break;
 				}
 				case 2: {
-					if (wall[x][++y] == 1) {
+					if (pac_man_variable.wall[x][++y] == 1) {
 						go = false;
 					}
 					break;
 				}
 				case 3: {
-					if (wall[--x][y] == 1) {
+					if (pac_man_variable.wall[--x][y] == 1) {
 						go = false;
 					}
 					break;
@@ -316,7 +265,7 @@ public class pac_man extends JFrame implements Runnable {
 				default:
 					break;
 				}
-				
+
 				if (go) {
 					switch (sub) {
 					case 0: {
@@ -346,8 +295,20 @@ public class pac_man extends JFrame implements Runnable {
 						th.sleep(5);
 						repaint();
 					}
-				}else {
+				} else {
 					th.sleep(1);
+				}
+
+				//ÄíÅ° ¸Ô±â
+				if (pac_man_variable.feed[x][y] == 1) {
+					pac_man_variable.feed[x][y] = 0;
+					score = score + 10;
+				}
+
+				//Å« ÄíÅ°
+				if (pac_man_variable.superFeed[x][y] == 1) {
+					pac_man_variable.superFeed[x][y] = 0;
+					score = score + 50;
 				}
 				
 				repaint();
@@ -358,8 +319,6 @@ public class pac_man extends JFrame implements Runnable {
 		}
 	}
 
-	public void size(JComponent c, int x, int y) {
-		c.setPreferredSize(new Dimension(x, y));
-	}
+	
 	// 0 == up, 1 == right, 2 == bottom, 3 == left;
 }
