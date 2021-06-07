@@ -21,7 +21,7 @@ import pac_man_base.pac_man_frame;
 import pac_man_base.pac_man_variable;
 
 @SuppressWarnings("serial")
-public class pac_man extends pac_man_frame{
+public class pac_man extends pac_man_frame {
 
 	Point pac_man = new Point();
 	int wherePac = 2, mouseSize = 0, drawPacX = 0, drawPacY = 0, draw = 0, sub = 3, where = 3;
@@ -41,12 +41,13 @@ public class pac_man extends pac_man_frame{
 
 		cp.add(ap = new JPanel(new BorderLayout()) {
 			@Override
-			protected void paintComponent(Graphics g) { //배경, 먹이 그리기
+			protected void paintComponent(Graphics g) { // 배경, 먹이 그리기
 				// TODO Auto-generated method stub
 				super.paintComponent(g);
 				for (int i = 0; i < 840; i = i + 30) {
 					for (int j = 0; j < 840; j = j + 30) {
 						g.setColor(new Color(36, 36, 223));
+						// 곧 삭제
 						g.drawRect(i, j, 30, 30);
 						if (pac_man_variable.wall[i / 30][j / 30] == 1) {
 							g.fillRect(i, j, 30, 30);
@@ -58,6 +59,10 @@ public class pac_man extends pac_man_frame{
 						if (pac_man_variable.superFeed[i / 30][j / 30] == 1) {
 							g.fillOval(i + 5, j + 5, 20, 20);
 						}
+						g.setColor(new Color(255, 188, 255));
+						if (pac_man_variable.gate[i / 30][j / 30] == 1) {
+							g.fillRect(i, j, 30, 30);
+						}
 					}
 				}
 			}
@@ -67,8 +72,8 @@ public class pac_man extends pac_man_frame{
 		size(ap, 840, 840);
 		pac_man.x = 14;
 		pac_man.y = 20;
-		
-		//팩맨그리기
+
+		// 팩맨그리기
 		ap.add(pac = new JPanel(new BorderLayout()) {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -112,20 +117,20 @@ public class pac_man extends pac_man_frame{
 		pac.setOpaque(false);
 		size(pac, 840, 840);
 
-		//유령그리기
+		// 유령그리기
 		pac.add(blinkyPanel = new JPanel(new BorderLayout()) {
 			protected void paintComponent(Graphics g) {
 				g.setColor(Color.red);
 				ImageIcon ic = new ImageIcon("image/blinky.png");
 				Image im = ic.getImage();
-				
-				g.drawImage(im,pac_man_variable.blinkyPoint.x * 30, pac_man_variable.blinkyPoint.y * 30, 30, 30,this);
+
+				g.drawImage(im, pac_man_variable.blinkyPoint.x * 30, pac_man_variable.blinkyPoint.y * 30, 30, 30, this);
 			};
 		});
-		
+
 		blinkyPanel.setOpaque(false);
-		size(blinkyPanel,840,840);
-		
+		size(blinkyPanel, 840, 840);
+
 		// 위에 점수 표시
 		np.add(ap = new JPanel() {
 			@Override
@@ -134,9 +139,9 @@ public class pac_man extends pac_man_frame{
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setColor(Color.white);
-				g2.setFont(new Font("Shylock NBP",Font.BOLD,30));
-				g2.drawString(score+"", 30, 50);
-				
+				g2.setFont(new Font("Shylock NBP", Font.BOLD, 30));
+				g2.drawString(score + "", 30, 50);
+
 			}
 		});
 
@@ -299,18 +304,18 @@ public class pac_man extends pac_man_frame{
 					th.sleep(1);
 				}
 
-				//쿠키 먹기
+				// 쿠키 먹기
 				if (pac_man_variable.feed[x][y] == 1) {
 					pac_man_variable.feed[x][y] = 0;
 					score = score + 10;
 				}
 
-				//큰 쿠키
+				// 큰 쿠키
 				if (pac_man_variable.superFeed[x][y] == 1) {
 					pac_man_variable.superFeed[x][y] = 0;
 					score = score + 50;
 				}
-				
+
 				repaint();
 				revalidate();
 			} catch (Exception e) {
@@ -319,6 +324,5 @@ public class pac_man extends pac_man_frame{
 		}
 	}
 
-	
 	// 0 == up, 1 == right, 2 == bottom, 3 == left;
 }

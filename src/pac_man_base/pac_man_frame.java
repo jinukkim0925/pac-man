@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class pac_man_frame extends JFrame implements Runnable{
-	public JPanel jp1, ap, np, sp, wp, cp, ep,pac, blinkyPanel, pinkyPanel, lnkyPanel, clydePanel;;
+	public JPanel jp1, ap, np, sp, wp, cp, ep,pac, blinkyPanel, pinkyPanel, lnkyPanel, clydePanel;
 	
 	public void fs(String s) {
 		setTitle(s);
