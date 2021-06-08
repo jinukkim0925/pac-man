@@ -15,39 +15,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class pac_man_design extends JFrame	implements Runnable{
+public class pac_man_design_map extends JFrame	implements Runnable{
 
 	JPanel jp1,ap,np,sp,wp,cp,ep;
-	public int wall[][] = 
-		   {{1,1,1,1,1,1,1,1,1,1,0,0,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1},
-			{1,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1},
-			{1,0,1,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,0,1,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,0,0,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,1,1,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,1,0,1},
-			{1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,1,0,1},
-			{1,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,1,0,1,1,1,1,0,1,0,1,0,1,1,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,1,0,1},
-			{1,0,0,0,0,0,1,1,0,0,0,0,1,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1},
-			{1,1,1,1,1,0,1,1,1,1,0,0,0,0,0,1,0,1,1,1,0,1,1,1,1,1,0,1},
-			{1,1,1,1,1,0,1,1,1,1,0,0,0,0,0,1,0,1,1,1,0,1,1,1,1,1,0,1},
-			{1,0,0,0,0,0,1,1,0,0,0,0,1,0,0,1,0,1,0,0,0,1,1,0,0,0,0,1},
-			{1,0,1,1,1,0,1,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,1,0,1,1,1,1,0,1,0,1,0,1,1,0,1,1,0,1},
-			{1,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,1,0,1},
-			{1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,1,0,1},
-			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,1,1,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,0,0,0,1,1,0,1},
-			{1,0,1,1,1,0,1,1,0,1,0,0,1,0,1,0,0,1,0,1,1,0,1,0,1,1,0,1},
-			{1,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1},
-			{1,1,1,1,1,1,1,1,1,1,0,0,1,0,1,0,0,1,1,1,1,1,1,1,1,1,1,1}},feed[][] = new int[28][28], draw = 1;
-	public pac_man_design() {
+	public int wall[][] = new int[28][28],feed[][] = new int[28][28], draw = 1;
+	public pac_man_design_map() {
 		// TODO Auto-generated constructor stub
 		setTitle("ÆÑ¸Ç");
 		setDefaultCloseOperation(2);
@@ -80,10 +52,6 @@ public class pac_man_design extends JFrame	implements Runnable{
 						if (wall[i/30][j/30] == 1) {
 							g.fillRect(i, j, 30, 30);	
 						}
-						g.setColor(Color.yellow);
-						if (feed[i/30][j/30] == 1) {
-							g.fillRect(i, j, 30, 30);	
-						}
 					}
 				}
 			}
@@ -94,9 +62,9 @@ public class pac_man_design extends JFrame	implements Runnable{
 			public void mouseDragged(MouseEvent e) {
 				// TODO Auto-generated method stub
 				if (draw == 1) {
-					feed[e.getX()/30][e.getY()/30] = 1;
+					wall[e.getX()/30][e.getY()/30] = 1;
 				}else {
-					feed[e.getX()/30][e.getY()/30] = 0;
+					wall[e.getX()/30][e.getY()/30] = 0;
 				}
 				repaint();
 			}
@@ -108,13 +76,13 @@ public class pac_man_design extends JFrame	implements Runnable{
 				draw = e.getButton();
 				String s="";
 				if (e.getButton() == 2) {
-					for (int i = 0; i < feed.length; i++) {
+					for (int i = 0; i < wall.length; i++) {
 						s ="";
-						for (int j = 0; j < feed.length; j++) {
-							if (j == feed.length-1) {
-								s = s+feed[i][j];	
+						for (int j = 0; j < wall.length; j++) {
+							if (j == wall.length-1) {
+								s = s+wall[i][j];	
 							}else {
-								s = s+feed[i][j] +",";
+								s = s+wall[i][j] +",";
 							}
 							
 						}
@@ -131,7 +99,7 @@ public class pac_man_design extends JFrame	implements Runnable{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new pac_man_design();
+		new pac_man_design_map();
 	}
 
 	@Override
