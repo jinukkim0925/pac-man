@@ -36,6 +36,12 @@ public class blinky extends pac_man_frame {
 					if (pac_man.frightened != 0) {
 						p = randomPoint(pac_man_variable.blinkyPoint);
 					}
+					if (pac_man_variable.blinkydie) {
+						p = trackingMode(new Point(13,11), pac_man_variable.blinkyPoint);
+						if (p.x == subP.x && p.y == subP.y) {
+							pac_man_variable.blinkydie = false;
+						}
+					}
 					int where = 0;
 					if (p.x > subP.x) {
 						where = 3;

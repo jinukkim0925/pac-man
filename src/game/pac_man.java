@@ -30,7 +30,7 @@ public class pac_man extends pac_man_frame {
 	public static boolean run = true, turn = true, die = false;
 
 	DecimalFormat format = new DecimalFormat("00000");
-	public static int score = 0, max_score = 0, frightened = 0;
+	public static int score = 0, max_score = 0, frightened = 0, killcnt = 0;
 
 	public pac_man() {
 		// TODO Auto-generated constructor stub
@@ -151,14 +151,13 @@ public class pac_man extends pac_man_frame {
 				Image impinky = pinky.getImage();
 				Image imclyde = clyde.getImage();
 				Image imlnky = lnky.getImage();
-				
+
 				if (die == false) {
 					g.drawImage(imblinky, b.blinkyDrawX, b.blinkyDrawY, 30, 30, this);
 					g.drawImage(impinky, p.pinkyDrawX, p.pinkyDrawY, 30, 30, this);
 					g.drawImage(imclyde, c.clydeDrawX, c.clydeDrawY, 30, 30, this);
 					g.drawImage(imlnky, l.lnkyDrawX, l.lnkyDrawY, 30, 30, this);
 				}
-				
 
 			};
 		});
@@ -252,6 +251,8 @@ public class pac_man extends pac_man_frame {
 			}
 			if (frightened != 0) {
 				frightened--;
+			} else {
+				killcnt = 0;
 			}
 			repaint();
 		}
@@ -268,9 +269,12 @@ public class pac_man extends pac_man_frame {
 		// TODO Auto-generated method stub
 		while (run) {
 			try {
+
 				int x = pac_man.x;
 				int y = pac_man.y;
 				boolean go = true;
+
+				// Á×À½
 
 				if (x == 0 && sub == 3) {
 					x = 28;
@@ -337,18 +341,57 @@ public class pac_man extends pac_man_frame {
 						break;
 					}
 					for (draw = 30; draw > 0; draw--) {
+						if (frightened != 0) {
+							if (pac_man.x == pac_man_variable.blinkyPoint.x
+									&& pac_man.y == pac_man_variable.blinkyPoint.y
+									&& pac_man_variable.blinkydie == false) {
+								score = (int) (score + 100 * Math.pow(2, killcnt + 1));
+								pac_man_variable.blinkydie = true;
+								killcnt++;
+							}
+							if (pac_man.x == pac_man_variable.pinkyPoint.x
+									&& pac_man.y == pac_man_variable.pinkyPoint.y) {
+
+							}
+							if (pac_man.x == pac_man_variable.lnkyPoint.x
+									&& pac_man.y == pac_man_variable.lnkyPoint.y) {
+
+							}
+							if (pac_man.x == pac_man_variable.clydePoint.x
+									&& pac_man.y == pac_man_variable.clydePoint.y) {
+
+							}
+
+						} else {
+							if (pac_man.x == pac_man_variable.blinkyPoint.x
+									&& pac_man.y == pac_man_variable.blinkyPoint.y
+									|| pac_man.x == pac_man_variable.pinkyPoint.x
+											&& pac_man.y == pac_man_variable.pinkyPoint.y
+									|| pac_man.x == pac_man_variable.clydePoint.x
+											&& pac_man.y == pac_man_variable.clydePoint.y
+									|| pac_man.x == pac_man_variable.lnkyPoint.x
+											&& pac_man.y == pac_man_variable.lnkyPoint.y) {
+								goastKill();
+								th.sleep(2000);
+								reset();
+							}
+						}
 						th.sleep(5);
 						repaint();
 					}
 				} else {
+
 					th.sleep(1);
 				}
 
-				if (x == pac_man_variable.blinkyPoint.x && y == pac_man_variable.blinkyPoint.y) {
-					goastKill();
-					th.sleep(2000);
-					reset();
-				}
+//				if ((pac_man.x == pac_man_variable.blinkyPoint.x && pac_man.y == pac_man_variable.blinkyPoint.y)
+//						|| (pac_man.x == pac_man_variable.pinkyPoint.x && pac_man.y == pac_man_variable.pinkyPoint.y)
+//						|| (pac_man.x == pac_man_variable.clydePoint.x && pac_man.y == pac_man_variable.clydePoint.y)
+//						|| (pac_man.x == pac_man_variable.lnkyPoint.x && pac_man.y == pac_man_variable.lnkyPoint.y)) {
+//					goastKill();
+//					th.sleep(2000);
+//					reset();
+//				}
 
 				// ÄíÅ° ¸Ô±â
 				if (pac_man_variable.feed[x][y] == 1) {
@@ -394,7 +437,6 @@ public class pac_man extends pac_man_frame {
 		pac_man_variable.gameTime = 0;
 		pac_man.x = 14;
 		pac_man.y = 20;
-		
 
 	}
 
