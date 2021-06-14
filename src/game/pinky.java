@@ -110,6 +110,7 @@ public class pinky extends pac_man_frame {
 						if (p.x == subP.x && p.y == subP.y) {
 							pac_man_variable.pinkydie = false;
 							pac_man_variable.resurrectiongoast[1] = 1;
+							pac_man_variable.diegoast[1] = 0;
 						}
 					}
 

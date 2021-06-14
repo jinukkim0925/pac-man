@@ -46,6 +46,7 @@ public class clyde extends pac_man_frame {
 						if (p.x == subP.x && p.y == subP.y) {
 							pac_man_variable.clydedie = false;
 							pac_man_variable.resurrectiongoast[3] = 1;
+							pac_man_variable.diegoast[3] = 0;
 						}
 					}
 					
