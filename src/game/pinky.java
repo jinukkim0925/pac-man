@@ -104,6 +104,14 @@ public class pinky extends pac_man_frame {
 					if (pac_man.frightened != 0) {
 						p = randomPoint(pac_man_variable.pinkyPoint);
 					}
+					
+					if (pac_man_variable.pinkydie) {
+						p = trackingMode(new Point(13,14), pac_man_variable.pinkyPoint);
+						if (p.x == subP.x && p.y == subP.y) {
+							pac_man_variable.pinkydie = false;
+							pac_man_variable.resurrectiongoast[1] = 1;
+						}
+					}
 
 					int where = 0;
 					if (p.x > subP.x) {

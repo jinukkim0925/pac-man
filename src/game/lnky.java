@@ -85,6 +85,15 @@ public class lnky extends pac_man_frame {
 					if (pac_man.frightened != 0) {
 						p = randomPoint(pac_man_variable.lnkyPoint);
 					}
+					
+					if (pac_man_variable.lnkydie) {
+						p = trackingMode(new Point(13,14), pac_man_variable.lnkyPoint);
+						if (p.x == subP.x && p.y == subP.y) {
+							pac_man_variable.lnkydie = false;
+							pac_man_variable.resurrectiongoast[2] = 1;
+						}
+					}
+					
 					int where = 0;
 					if (p.x > subP.x) {
 						where = 3;

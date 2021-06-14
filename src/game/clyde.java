@@ -34,13 +34,21 @@ public class clyde extends pac_man_frame {
 					} else {
 						p = trackingMode(pac_man.pac_man, pac_man_variable.clydePoint);
 					}
-
+					
 					if (p.x == subP.x && p.y == subP.y) {
 						p = randomPoint(pac_man_variable.clydePoint);
 					}
 					if (pac_man.frightened != 0) {
 						p = randomPoint(pac_man_variable.clydePoint);
 					}
+					if (pac_man_variable.clydedie) {
+						p = trackingMode(new Point(13,14), pac_man_variable.clydePoint);
+						if (p.x == subP.x && p.y == subP.y) {
+							pac_man_variable.clydedie = false;
+							pac_man_variable.resurrectiongoast[3] = 1;
+						}
+					}
+					
 					int where = 0;
 					if (p.x > subP.x) {
 						where = 3;
