@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -19,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import pac_man_base.pac_man_frame;
+import pac_man_base.pac_man_resetdata;
 import pac_man_base.pac_man_variable;
 
 @SuppressWarnings("serial")
@@ -29,7 +31,9 @@ public class pac_man extends pac_man_frame {
 	// 0 == up, 1 == right, 2 == bottom, 3 == left;
 	Thread th = new Thread(this);
 	public static boolean run = true, turn = true, die = false, extrascore = false;
-
+	SimpleDateFormat ss = new SimpleDateFormat("mm:ss:SS");
+	long smilli = 0, emilli = 0;
+	
 	DecimalFormat format = new DecimalFormat("00000");
 	public static int score = 0, max_score = 0, frightened = 0, killcnt = 0;
 
@@ -188,9 +192,20 @@ public class pac_man extends pac_man_frame {
 					g2.setFont(new Font("hy견고딕", Font.BOLD, 20));
 					g2.drawString((int) (100 * Math.pow(2, killcnt + 1)) + "", pac_man.x * 30, pac_man.y * 30);
 				}
+				if (pac_man_variable.gameOver) {
+					Graphics2D g2 = (Graphics2D) g;
+					g2.setColor(Color.red);
+					g2.setFont(new Font("hy견고딕", Font.BOLD, 50));
+					g2.drawString("GAME OVER", 250, 450);
+				}
+				if (pac_man_variable.clear) {
+					Graphics2D g2 = (Graphics2D) g;
+					g2.setColor(Color.yellow);
+					g2.setFont(new Font("hy견고딕", Font.BOLD, 50));
+					g2.drawString("GAME CLEAR!", 250, 450);	
+				}
 			};
 		});
-
 		goastPanel.setOpaque(false);
 		size(goastPanel, 840, 840);
 
@@ -204,7 +219,11 @@ public class pac_man extends pac_man_frame {
 				g2.setColor(Color.white);
 				g2.setFont(new Font("Shylock NBP", Font.BOLD, 30));
 				g2.drawString(score + "", 30, 50);
-
+				g2.drawString("Time : " + ss.format(emilli - smilli), 600, 70);
+				for (int i = 0; i < pac_man_variable.pac_manLife; i++) {
+					g.setColor(Color.yellow);
+					g.fillArc(30*(i+1), 60, 30, 30,135+90*1,270);
+				}
 			}
 		});
 
@@ -252,7 +271,7 @@ public class pac_man extends pac_man_frame {
 					break;
 				}
 				case 40: {
-					if (pac_man_variable.wall[x][++y] == 0) {
+					if (pac_man_variable.wall[x][y+1] == 0 && pac_man_variable.gate[x][y+1] == 0) {
 						sub = 2;
 					}
 					break;
@@ -262,9 +281,13 @@ public class pac_man extends pac_man_frame {
 				}
 			}
 		});
-
+		
+		
+		
 		// 게임 타이머
 		new gameTime();
+		smilli = System.currentTimeMillis();
+		
 		sh();
 	}
 
@@ -373,9 +396,10 @@ public class pac_man extends pac_man_frame {
 						goastCatch();
 						th.sleep(5);
 						repaint();
+						emilli = System.currentTimeMillis();
 					}
 				} else {
-
+					emilli = System.currentTimeMillis();
 					th.sleep(1);
 				}
 
@@ -420,8 +444,14 @@ public class pac_man extends pac_man_frame {
 					}
 				}
 
-				if (ch == 0) {
-
+				if (ch == 0) { //클리어
+					pac_man_variable.clear = true;
+					run = false;
+					pac_man_variable.run = false;
+					gameTime.tm.stop();
+					
+					JOptionPane.showInputDialog(this,"이름을 입력해 주세요.:");
+					dispose();
 				}
 
 				repaint();
@@ -492,7 +522,6 @@ public class pac_man extends pac_man_frame {
 						|| pac_man.x == pac_man_variable.lnkyPoint.x && pac_man.y == pac_man_variable.lnkyPoint.y
 								&& pac_man_variable.diegoast[2] == 0) {
 					goastKill();
-					th.sleep(2000);
 					reset();
 				}
 			}
@@ -504,8 +533,47 @@ public class pac_man extends pac_man_frame {
 
 	public void goastKill() {
 		die = true;
+		if (pac_man_variable.pac_manLife == 0) {
+			try { //게임오버
+				pac_man_variable.gameOver = true;
+				th.sleep(3000);
+				pac_man_variable.pac_manLife = 1;
+				th.sleep(500);
+				pac_man_variable.pac_manLife = 2;
+				th.sleep(500);
+				pac_man_variable.pac_manLife = 3;
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			pac_man_variable.gameOver = false;
+			for (int i = 0; i < pac_man_variable.feed.length; i++) {
+				for (int j = 0; j < pac_man_variable.feed[i].length; j++) {
+					if (pac_man_resetdata.feed[i][j] == 1) {
+						pac_man_variable.feed[i][j] = 1;
+					}
+				}
+			}
+			for (int i = 0; i < pac_man_variable.superFeed.length; i++) {
+				for (int j = 0; j < pac_man_variable.superFeed[i].length; j++) {
+					if (pac_man_resetdata.superFeed[i][j] == 1) {
+						pac_man_variable.superFeed[i][j] = 1;
+					}
+				}
+			}
+			score = 0;
+			smilli = System.currentTimeMillis();
+		}else {
+			try {
+				pac_man_variable.pac_manLife--;
+				th.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
-
+	
 	public void reset() {
 		repaint();
 		pac_man_variable.blinkyPoint = new Point(13, 11);
@@ -524,12 +592,21 @@ public class pac_man extends pac_man_frame {
 		pac_man_variable.pinkydie = false;
 		pac_man_variable.lnkydie = false;
 		pac_man_variable.clydedie = false;
+		
+		pac_man_variable.resurrectiongoast[0] = 0;
+		pac_man_variable.resurrectiongoast[1] = 0;
+		pac_man_variable.resurrectiongoast[2] = 0;
+		pac_man_variable.resurrectiongoast[3] = 0;
+		pac_man_variable.diegoast[0] = 0;
+		pac_man_variable.diegoast[1] = 0;
+		pac_man_variable.diegoast[2] = 0;
+		pac_man_variable.diegoast[3] = 0;
+		
 		frightened = 0;
 		die = false;
 		pac_man_variable.gameTime = 0;
 		pac_man.x = 14;
 		pac_man.y = 20;
-
 	}
 
 	// 0 == up, 1 == right, 2 == bottom, 3 == left;

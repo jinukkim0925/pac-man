@@ -121,5 +121,5 @@ public class pac_man_variable {
 
 	public static Point blinkyPoint = new Point(13, 11),clydePoint = new Point(15, 13),pinkyPoint = new Point(13, 13),lnkyPoint = new Point(11, 13);
 	public static int goastSpeed = 6, gameTime = 0, diegoast[] = new int[4], resurrectiongoast[] = new int[4], pac_manLife = 3;
-	public static boolean run = true, blinkydie = false, clydedie = false, pinkydie = false, lnkydie = false;
+	public static boolean run = true, blinkydie = false, clydedie = false, pinkydie = false, lnkydie = false, gameOver = false, clear = false;
 }

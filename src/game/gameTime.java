@@ -14,7 +14,7 @@ public class gameTime {
 		tm.start();
 	}
 	
-	Timer tm = new Timer(1000, new ActionListener() {
+	public static Timer tm = new Timer(1000, new ActionListener() {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
