@@ -175,6 +175,7 @@ public class pac_man extends pac_man_frame {
 				if (pac_man_variable.resurrectiongoast[2] == 1) {
 					lnky = new ImageIcon("image/lnky.png");
 				}
+				
 				Image imblinky = blinky.getImage();
 				Image impinky = pinky.getImage();
 				Image imclyde = clyde.getImage();

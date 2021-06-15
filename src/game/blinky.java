@@ -44,6 +44,7 @@ public class blinky extends pac_man_frame {
 							pac_man_variable.diegoast[0] = 0;
 						}
 					}
+					
 					int where = 0;
 					if (p.x > subP.x) {
 						where = 3;
