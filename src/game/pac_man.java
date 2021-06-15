@@ -53,7 +53,7 @@ public class pac_man extends pac_man_frame {
 					for (int j = 0; j < 840; j = j + 30) {
 						g.setColor(new Color(36, 36, 223));
 						// °ð »èÁ¦
-						g.drawRect(i, j, 30, 30);
+//						g.drawRect(i, j, 30, 30);
 						if (pac_man_variable.wall[i / 30][j / 30] == 1) {
 							g.fillRect(i, j, 30, 30);
 						}
